@@ -4,10 +4,12 @@ function SearchController (model, searchView, resultsView)
     this.model = model;
     this.searchView = searchView;
     this.resultsView = resultsView;
+    this.category = 'people';
 
    //configUI this is the initial setup for the controller
    this.configUI = async function()
    {
+        this.searchView.view.addEventListener('submit', this.onHandleSubmit)
         const data = await model.init();
        
         //Pass the data to the View
@@ -21,9 +23,26 @@ function SearchController (model, searchView, resultsView)
         })
    }
 
+   this.onHandleSubmit = async (e) =>
+   {
+       e.preventDefault();
+
+       //No Validation
+
+       //Take  from name and values
+       const queryParams = {
+           category:this.category,
+           name:e.currentTarget.searchTerm.value
+       }
+
+       const searchResponse = await this.model.search(queryParams)
+       resultsView.renderPeople(searchResponse);
+   }
+
    this.onCheckedHandler = (e) =>
    {
-       console.log(e.currentTarget.value)
+       this.category = e.currentTarget.value;
+       this.searchView.updateLabel( this.category)
    }
 
    this.configUI()

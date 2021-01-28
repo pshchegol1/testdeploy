@@ -30,6 +30,32 @@ function ResultsView(viewId)
         console.log(person)
         const elem = ejs.render(personView,  {person:person})
         this.container.insertAdjacentHTML('afterbegin', elem)
+    };
+
+    this.renderPeople = function(people)
+    {
+        this.removeChildElements();
+
+        if(people.results.length === 0)
+        {
+          const elem = ejs.render(noResultsView)
+          this.container.insertAdjacentHTML('afterbegin', elem)
+        }
+
+        if(people.results.length !== 0)
+        {
+            people.results.forEach((person)=>{
+              const elem = ejs.render(personView, {person:person})
+              this.container.insertAdjacentHTML('afterbegin', elem)
+            })
+        }
+    }
+
+    this.removeChildElements = function()
+    {
+      this.container.querySelectorAll('aside').forEach((person)=>{
+        this.container.removeChild(person);
+      })
     }
 }
 

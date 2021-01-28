@@ -23,7 +23,23 @@ function SwapiModel()
         const res = await req.json()
         return res
     }
-    return this
+    this.search = async function(searchStuff)
+    {
+        //Set up the URL
+        const {category, name} = {...searchStuff}
+        let url = new URL(this.apiBaseurl + category + '?')
+
+        const params = new URLSearchParams() 
+        params.set('search', name)
+        url = url + params
+        const req = await fetch(url)
+        const res = await req.json()
+        console.log(res)
+        return res
+
+      
+    }
+    return this;
 
 }
 
